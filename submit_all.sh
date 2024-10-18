@@ -4,6 +4,7 @@ detlon=70.7030029296875
 detlat=-9.714359283447266
 inputdir=/users/PAS0654/wluszczak/ensda/datafiles/
 outdir=/users/PAS0654/wluszczak/ensda/
+username=wluszczak
 
 if ! test -d $outdir/output/; then
   echo "Making output directory" $outdir/output/
@@ -19,7 +20,7 @@ fi
 for modelnum in {1..2..1}; do
   model_complete=0
   while [ $model_complete -eq 0 ]; do
-    squeue_out=$(squeue -u wluszczak | wc)
+    squeue_out=$(squeue -u $username | wc)
     job_count=$(echo $squeue_out | cut -d ' ' -f 1)  
     echo $job_count
     if ((job_count<600)); then
@@ -36,7 +37,7 @@ done
 
 part1_complete=0
 while [ $part1_complete -eq 0 ]; do
-  squeue_out=$(squeue -u wluszczak | wc)
+  squeue_out=$(squeue -u $username | wc)
   job_count=$(echo $squeue_out | cut -d ' ' -f 1)
   if [ $job_count -eq 1 ]; then
     part1_complete=1
@@ -56,10 +57,22 @@ for modelnum in {1..2..1}; do
   fi
 done
 
+part2_complete=0
+while [ $part2_complete -eq 0 ]; do
+  squeue_out=$(squeue -u $username | wc)
+  job_count=$(echo $squeue_out | cut -d ' ' -f 1)
+  if [ $job_count -eq 1 ]; then
+    part2_complete=1
+    echo "average splines done, calculating muon flux"
+  fi
+  sleep 30s
+done
+
+
 for modelnum in {1..2..1}; do
   model_complete=0
   while [ $model_complete -eq 0 ]; do
-    squeue_out=$(squeue -u wluszczak | wc)
+    squeue_out=$(squeue -u $username | wc)
     job_count=$(echo $squeue_out | cut -d ' ' -f 1)
     echo $job_count
     if ((job_count<900)); then
@@ -75,7 +88,7 @@ done
 
 muflux_complete=0
 while [ $muflux_complete -eq 0 ]; do
-  squeue_out=$(squeue -u wluszczak | wc)
+  squeue_out=$(squeue -u $username | wc)
   job_count=$(echo $squeue_out | cut -d ' ' -f 1)
   if [ $job_count -eq 1 ]; then
     muflux_complete=1
