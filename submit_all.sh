@@ -17,7 +17,7 @@ if ! test -d $outdir/splines/; then
 fi
 
 
-for modelnum in {1..2..1}; do
+for modelnum in {1..50..1}; do
   model_complete=0
   while [ $model_complete -eq 0 ]; do
     squeue_out=$(squeue -u $username | wc)
@@ -26,7 +26,7 @@ for modelnum in {1..2..1}; do
     if ((job_count<600)); then
       for ph in {0..360..1}; do
         echo "submitting job " $modelnum $ph
-        sbatch submit_slice_spline.sh $modelnum $ph $detlon $detlat $inputdir $outdir
+        sbatch --output=/dev/null --error=/dev/null submit_slice_spline.sh $modelnum $ph $detlon $detlat $inputdir $outdir
       done
       model_complete=1
       echo "submitted model" $modelnum
@@ -49,7 +49,7 @@ done
 
 outputdir=$outdir/output/
 for modelnum in {1..2..1}; do
-  sbatch submit_combine_slices.sh $modelnum $detlon $detlat $outdir
+  sbatch --output=/dev/null --error=/dev/null submit_combine_slices.sh $modelnum $detlon $detlat $outdir
   strnum=$(printf "%05g" $modelnum)
   if ! test -d $outputdir/$strnum/; then
     echo "Making output directory" $outputdir/$strnum
