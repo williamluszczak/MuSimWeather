@@ -9,4 +9,12 @@ Prerequisites (will add version numbers later):
 - Numpy (https://numpy.org/)
 
 # Instructions
+You should only have to interface with the `submit_all` script. Before running this script, you will need to set a few variables:
+- `detlon` is the longitude of the simulated muon detector location
+- `detlat` is the latitude of the simulated muon detector location
+- `inputdir` is the directory containing all the `.pkl` files that have information about the density field for each atmospheric model
+- `outdir` is where you want the output files (as well as temporary spline files) to be written. There will be a lot of temporary files written to this directory, but the scripts should autmatically clean up intermediate files at the end
+- `username` is your OSC username (used for `squeue` commands)
 
+Once these variables are set, you should just be able to run `./submit_all.sh` to generate your muon flux output. Output `.npy` files describing the average muon flux as a function of declination will be written to `$(outdir)/output/`/ 
+ 
