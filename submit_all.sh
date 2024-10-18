@@ -48,7 +48,7 @@ done
 
 
 outputdir=$outdir/output/
-for modelnum in {1..2..1}; do
+for modelnum in {1..50..1}; do
   sbatch --output=/dev/null --error=/dev/null submit_combine_slices.sh $modelnum $detlon $detlat $outdir
   strnum=$(printf "%05g" $modelnum)
   if ! test -d $outputdir/$strnum/; then
@@ -69,7 +69,7 @@ while [ $part2_complete -eq 0 ]; do
 done
 
 
-for modelnum in {1..2..1}; do
+for modelnum in {1..50..1}; do
   model_complete=0
   while [ $model_complete -eq 0 ]; do
     squeue_out=$(squeue -u $username | wc)
@@ -98,7 +98,7 @@ while [ $muflux_complete -eq 0 ]; do
 done
 
 
-for modelnum in {1..2..1}; do
+for modelnum in {1..50..1}; do
   sbatch submit_combine_muflux.sh $modelnum $outdir
 done
 
