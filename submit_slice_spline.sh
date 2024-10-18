@@ -6,6 +6,5 @@
 #SBATCH --time=1:00:00
 
 echo "starting slice spline" $1 $2 $3 $4
-cd /users/PAS0654/wluszczak/ensda/
 python3 make_slice_spline.py $1 $2 $3 $4 $5 $6
 echo "finished spline for" $1 $2 $3 $4

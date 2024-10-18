@@ -25,7 +25,7 @@ for modelnum in {1..2..1}; do
     if ((job_count<600)); then
       for ph in {0..360..1}; do
         echo "submitting job " $modelnum $ph
-        sbatch --output=/dev/null --error=/dev/null submit_slice_spline.sh $modelnum $ph $detlon $detlat $inputdir $outdir
+        sbatch submit_slice_spline.sh $modelnum $ph $detlon $detlat $inputdir $outdir
       done
       model_complete=1
       echo "submitted model" $modelnum

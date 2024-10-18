@@ -6,7 +6,7 @@
 #SBATCH --time=1:00:00
 
 echo "starting slice combiner" $1 $2 $3
-cd /users/PAS0654/wluszczak/ensda/
+#cd /users/PAS0654/wluszczak/ensda/
 python3 combine_slice_splines.py $1 $2 $3 $4
 retVal=$?
 if [ $retVal -eq 0 ]; then

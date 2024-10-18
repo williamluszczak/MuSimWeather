@@ -6,6 +6,6 @@
 #SBATCH --time=1:00:00
 
 echo "starting muflux calc" $1 $2
-cd /users/PAS0654/wluszczak/ensda/
+#cd /users/PAS0654/wluszczak/ensda/
 python3 muflux_calc.py $1 $2 $3
 echo "finished spline for" $1 $2
