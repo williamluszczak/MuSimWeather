@@ -9,7 +9,7 @@ Prerequisites (will add version numbers later):
 - Numpy (https://numpy.org/)
 
 # Instructions
-You should only have to interface with the `submit_all` script. Before running this script, you will need to set a few variables:
+You should only have to interface with the `submit_all.sh` script. Before running this script, you will need to set a few variables at the top of [this script](https://github.com/williamluszczak/MuSimWeather/blob/main/submit_all.sh#L3-L7):
 - `detlon` is the longitude of the simulated muon detector location
 - `detlat` is the latitude of the simulated muon detector location
 - `inputdir` is the directory containing all the `.pkl` files that have information about the density field for each atmospheric model
