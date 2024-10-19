@@ -11,29 +11,9 @@ import crflux.models as pm
 from scipy import interpolate
 import sys
 
-from netCDF4 import Dataset
-from bisect import bisect
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 from scipy import stats
-import pandas as pd
 import geopy.distance
 import time
-
-mpl.rc('image', cmap='Blues_r')
-cmap = mpl.cm.get_cmap('Blues_r')
-
-
-mpl.rcParams['xtick.labelsize']=18
-mpl.rcParams['ytick.labelsize']=18
-mpl.rcParams['axes.labelsize']=24
-mpl.rcParams['lines.linewidth']=3
-mpl.rcParams['patch.linewidth']=3
-mpl.rcParams['legend.fontsize']=14
-mpl.rcParams['axes.titlesize']=24
-mpl.rcParams.update({'figure.autolayout': True})
-mpl.rcParams['figure.figsize'] = 10, 6
-mpl.rcParams['font.family'] = 'sans-serif'
 
 class TestAtmosphere(CorsikaAtmosphere):
     def __init__(self, location, season=None, phis=np.arange(0,10,1), fpath=None):
