@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
 #SBATCH --job-name=slice_spline_$1_$2_$3_$4
-#SBATCH --account=pas2277
 #SBATCH --mem=10gb
 #SBATCH --time=1:00:00
 

@@ -5,6 +5,7 @@ detlat=-9.714359283447266
 inputdir=/users/PAS0654/wluszczak/ensda/datafiles/
 outdir=/users/PAS0654/wluszczak/ensda/
 username=wluszczak
+osc_acc=pas2277
 
 if ! test -d $outdir/output/; then
   echo "Making output directory" $outdir/output/
@@ -26,7 +27,8 @@ for modelnum in {1..50..1}; do
     if ((job_count<600)); then
       for ph in {0..360..1}; do
         echo "submitting job " $modelnum $ph
-        sbatch --output=/dev/null --error=/dev/null submit_slice_spline.sh $modelnum $ph $detlon $detlat $inputdir $outdir
+        echo $osc_acc
+        sbatch --account=$osc_acc --output=/dev/null --error=/dev/null submit_slice_spline.sh $modelnum $ph $detlon $detlat $inputdir $outdir
       done
       model_complete=1
       echo "submitted model" $modelnum
@@ -49,7 +51,7 @@ done
 
 outputdir=$outdir/output/
 for modelnum in {1..50..1}; do
-  sbatch --output=/dev/null --error=/dev/null submit_combine_slices.sh $modelnum $detlon $detlat $outdir
+  sbatch --account=$osc_acc --output=/dev/null --error=/dev/null submit_combine_slices.sh $modelnum $detlon $detlat $outdir
   strnum=$(printf "%05g" $modelnum)
   if ! test -d $outputdir/$strnum/; then
     echo "Making output directory" $outputdir/$strnum
@@ -78,7 +80,7 @@ for modelnum in {1..50..1}; do
     if ((job_count<900)); then
       echo "Submitting jobs for model" $modelnum
       for th in {5..81..5}; do
-        sbatch submit_muflux_calc.sh $modelnum $th $outdir
+        sbatch --account=$osc_acc submit_muflux_calc.sh $modelnum $th $outdir
       done
       model_complete=1
     fi
@@ -99,7 +101,7 @@ done
 
 
 for modelnum in {1..50..1}; do
-  sbatch submit_combine_muflux.sh $modelnum $outdir
+  sbatch --account=$osc_account submit_combine_muflux.sh $modelnum $outdir
 done
 
 echo "Finished everything"

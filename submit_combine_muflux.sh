@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
 #SBATCH --job-name=combine_muflux_$1
-#SBATCH --account=pas2277
 #SBATCH --mem=3gb
 #SBATCH --time=1:00:00
 
