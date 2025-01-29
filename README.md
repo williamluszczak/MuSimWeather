@@ -15,6 +15,7 @@ You should only have to interface with the `submit_all.sh` script. Before runnin
 - `inputdir` is the directory containing all the `.pkl` files that have information about the density field for each atmospheric model
 - `outdir` is where you want the output files (as well as temporary spline files) to be written. There will be a lot of temporary files written to this directory, but the scripts should autmatically clean up intermediate files at the end
 - `username` is your OSC username (used for `squeue` commands)
+- `osc_acc` is the OSC project number (e.g. PAS2635 or whatever project you want to use resources from to run these calculations)
 
 Once these variables are set, you should just be able to run `./submit_all.sh` to generate your muon flux output. Output `.npy` files describing the average muon flux as a function of declination will be written to `$(outdir)/output/`/ 
  
