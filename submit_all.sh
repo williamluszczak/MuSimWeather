@@ -6,6 +6,7 @@ inputdir=/users/PAS0654/wluszczak/ensda/datafiles/
 outdir=/users/PAS0654/wluszczak/ensda/
 username=wluszczak
 osc_acc=pas2277
+NUM_ENS=10
 
 if ! test -d $outdir/output/; then
   echo "Making output directory" $outdir/output/
@@ -18,7 +19,7 @@ if ! test -d $outdir/splines/; then
 fi
 
 
-for modelnum in {1..50..1}; do
+for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
   model_complete=0
   while [ $model_complete -eq 0 ]; do
     squeue_out=$(squeue -u $username | wc)
@@ -50,7 +51,7 @@ done
 
 
 outputdir=$outdir/output/
-for modelnum in {1..50..1}; do
+for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
   sbatch --account=$osc_acc --output=/dev/null --error=/dev/null submit_combine_slices.sh $modelnum $detlon $detlat $outdir
   strnum=$(printf "%05g" $modelnum)
   if ! test -d $outputdir/$strnum/; then
@@ -71,7 +72,7 @@ while [ $part2_complete -eq 0 ]; do
 done
 
 
-for modelnum in {1..50..1}; do
+for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
   model_complete=0
   while [ $model_complete -eq 0 ]; do
     squeue_out=$(squeue -u $username | wc)
@@ -99,9 +100,20 @@ while [ $muflux_complete -eq 0 ]; do
   sleep 30s
 done
 
-
-for modelnum in {1..50..1}; do
+for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
   sbatch --account=$osc_account submit_combine_muflux.sh $modelnum $outdir
 done
+
+combinefiles_complete=0
+while [ $combinefiles_complete -eq 0 ]; do
+  squeue_out=$(squeue -u $username | wc)
+  job_count=$(echo $squeue_out | cut -d ' ' -f 1)
+  if [ $job_count -eq 1 ]; then
+    combinefiles_complete=1
+    echo "all ensemble muon flux files combined, proceeding with writing obs_seq"
+  fi
+  sleep 30s
+done
+
 
 echo "Finished everything"
