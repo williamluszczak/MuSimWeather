@@ -115,5 +115,6 @@ while [ $combinefiles_complete -eq 0 ]; do
   sleep 30s
 done
 
+python write_obs_seq.py $NUM_ENS $outdir
 
 echo "Finished everything"
