@@ -6,7 +6,7 @@ inputdir=/users/PAS0654/wluszczak/ensda/datafiles/
 outdir=/users/PAS0654/wluszczak/ensda/
 username=wluszczak
 osc_acc=pas2277
-NUM_ENS=10
+NUM_ENS=50
 
 if ! test -d $outdir/output/; then
   echo "Making output directory" $outdir/output/
@@ -26,11 +26,9 @@ for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
     job_count=$(echo $squeue_out | cut -d ' ' -f 1)  
     echo $job_count
     if ((job_count<600)); then
-      for ph in {0..360..1}; do
-        echo "submitting job " $modelnum $ph
-        echo $osc_acc
-        sbatch --account=$osc_acc --output=/dev/null --error=/dev/null submit_slice_spline.sh $modelnum $ph $detlon $detlat $inputdir $outdir
-      done
+      echo "submitting job " $modelnum $ph
+      echo $osc_acc
+      sbatch --account=$osc_acc submit_slice_spline.sh $modelnum $detlon $detlat $inputdir $outdir
       model_complete=1
       echo "submitted model" $modelnum
     fi
@@ -46,13 +44,13 @@ while [ $part1_complete -eq 0 ]; do
     part1_complete=1
     echo "all slices calculated, proceeding with combining"
   fi
-  sleep 30s
+  sleep 10s
 done
 
 
 outputdir=$outdir/output/
 for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
-  sbatch --account=$osc_acc --output=/dev/null --error=/dev/null submit_combine_slices.sh $modelnum $detlon $detlat $outdir
+  sbatch --account=$osc_acc submit_combine_slices.sh $modelnum $detlon $detlat $outdir
   strnum=$(printf "%05g" $modelnum)
   if ! test -d $outputdir/$strnum/; then
     echo "Making output directory" $outputdir/$strnum
@@ -68,7 +66,7 @@ while [ $part2_complete -eq 0 ]; do
     part2_complete=1
     echo "average splines done, calculating muon flux"
   fi
-  sleep 30s
+  sleep 10s
 done
 
 
@@ -101,7 +99,7 @@ while [ $muflux_complete -eq 0 ]; do
 done
 
 for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
-  sbatch --account=$osc_account submit_combine_muflux.sh $modelnum $outdir
+  sbatch --account=$osc_acc submit_combine_muflux.sh $modelnum $outdir
 done
 
 combinefiles_complete=0

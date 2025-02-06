@@ -6,15 +6,36 @@ from scipy import interpolate
 import pickle
 
 def make_avg_spline(phis, fpath, modelnum, detlon, detlat):
+    splinedict_filepath = fpath+'slice_splines_%s_%0.3f_%0.3f.npy'%(str(modelnum).zfill(5), detlon, detlat)
+    splinedict_file = np.load(splinedict_filepath, allow_pickle=True)
+    splinedict = splinedict_file.item()
+    
     slice_vals_list = []
     for phi in phis:
-        phifilepath = fpath+'/slice_spline_%s_%0.3f_%0.3f_%0.3f.npy'%(str(modelnum).zfill(5), phi, detlon, detlat)        
-        phifile = np.load(phifilepath)
+        print(phi)
+        slice_spline = splinedict[phi]
+        xvals = np.linspace(0,5000,100)
+        zvals = np.linspace(0,25,100)
 
-        plt_x = phifile[0]
-        plt_z = phifile[1]
-        slicevals = phifile[2]
+        arr_x = []
+        arr_z = []
+        slicevals = []
+        for x in xvals:
+            for z in zvals:
+                arr_x.append(x)
+                arr_z.append(z)
+                splineval = slice_spline(x,z)
+                if np.isnan(splineval):
+                    slicevals.append(0.)
+                else:
+                    slicevals.append(splineval)
+        outarr = np.array([arr_x, arr_z, slicevals])
+
+        plt_x = outarr[0]
+        plt_z = outarr[1]
+        slicevals = outarr[2]
         slice_vals_list.append(slicevals)
+
     slice_vals_list = np.array(slice_vals_list)
     slice_avg = np.average(slice_vals_list, axis=0)
 

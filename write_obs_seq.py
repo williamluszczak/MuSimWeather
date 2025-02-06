@@ -19,23 +19,24 @@ obs_type_definitions
           1
           125 MUON_FLUX              
   num_copies:            1  num_qc:            1
-  num_obs:            3  max_num_obs:          3
+  num_obs:            1  max_num_obs:          1
 observation                                                     
 GSI Quality Control                                             
-  first:            1  last:         2
+  first:            1  last:         1
  OBS            1
    100679.998779297     
    1.00000000000000     
-          -1           2          -1
+          -1           -1          -1
 obdef
 loc3d
-     1.845860254193458        0.3658209952390449         100680.0000000000      2
+     4.581663856694569        0.6389650498077684         92500.00000000000      2
 kind
           125
 external_FO      {0}       1""".format(maxmodelnum)
 
 footer=""" 21600     152057
-   1.69000000000000"""
+   0.640000000000000
+   1.00000000000000"""
 
 nrows = math.ceil(len(summed_mufluxes)/3.)
 reshaped_arr = []

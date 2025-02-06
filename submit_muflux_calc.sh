@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 #SBATCH --job-name=muflux_calc_$1_$2
-#SBATCH --mem=10gb
+#SBATCH --mem=5gb
 #SBATCH --time=1:00:00
 
 echo "starting muflux calc" $1 $2

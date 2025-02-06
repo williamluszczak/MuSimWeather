@@ -67,36 +67,43 @@ def make_slice_spline(phi, latlonhspline, detlon, detlat):
 
 
 modelnum = int(sys.argv[1])
-phi = float(sys.argv[2])
-detlon = float(sys.argv[3])
-detlat = float(sys.argv[4])
-inputdir = str(sys.argv[5])
-outdir = str(sys.argv[6])
+#phi = float(sys.argv[2])
+detlon = float(sys.argv[2])
+detlat = float(sys.argv[3])
+inputdir = str(sys.argv[4])
+outdir = str(sys.argv[5])
 
 #this_fpath = '/users/PAS0654/wluszczak/ensda/datafiles/air_density_%s.pkl'%(str(modelnum).zfill(5))
 this_fpath = inputdir+'/air_density_%s.pkl'%(str(modelnum).zfill(5))
+print("making 3d spline")
 full_spline = make_3d_spline(this_fpath)
+spline_dict = {}
+for phi in np.arange(0,360,1):
+    print("making spline for phi", phi)
+    slice_spline = make_slice_spline(phi, full_spline, detlon, detlat)
+    spline_dict[phi]=slice_spline
 
-slice_spline = make_slice_spline(phi, full_spline, detlon, detlat)
+#    xvals = np.linspace(0,5000,100)
+#    zvals = np.linspace(0,25,100)
+#
+#    arr_x = []
+#    arr_z = []
+#    slicevals = []
+#    for x in xvals:
+#        for z in zvals:
+#            arr_x.append(x)
+#            arr_z.append(z)
+#            splineval = slice_spline(x,z)
+#            if np.isnan(splineval):
+#                slicevals.append(0.)
+#            else:
+#                slicevals.append(splineval)
+#
+#    outarr = np.array([arr_x, arr_z, slicevals])
+#    combined_outarr.append(outarr)
 
-xvals = np.linspace(0,5000,100)
-zvals = np.linspace(0,25,100)
-
-arr_x = []
-arr_z = []
-slicevals = []
-for x in xvals:
-    for z in zvals:
-        arr_x.append(x)
-        arr_z.append(z)
-        splineval = slice_spline(x,z)
-        if np.isnan(splineval):
-            slicevals.append(0.)
-        else:
-            slicevals.append(splineval)
-
-outarr = np.array([arr_x, arr_z, slicevals])
-#splinedir = '/users/PAS0654/wluszczak/ensda/splines/'
+#combined_outarr = np.array(combined_outarr)
+##splinedir = '/users/PAS0654/wluszczak/ensda/splines/'
 splinedir = outdir+'/splines/'
-np.save(splinedir+'slice_spline_%s_%0.3f_%0.3f_%0.3f'%(str(modelnum).zfill(5), phi, detlon, detlat), outarr)
-
+#np.save(splinedir+'slice_spline_%s_%0.3f_%0.3f_%0.3f'%(str(modelnum).zfill(5), phi, detlon, detlat), outarr)
+np.save(splinedir+'slice_splines_%s_%0.3f_%0.3f.npy'%(str(modelnum).zfill(5), detlon, detlat), spline_dict)
