@@ -54,7 +54,6 @@ done
 
 outputdir=$outdir/output/
 for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
-#  sbatch --account=$osc_acc submit_combine_slices.sh $modelnum $detlon $detlat $outdir
   strnum=$(printf "%05g" $modelnum)
   if ! test -d $outputdir/$strnum/; then
     echo "Making output directory" $outputdir/$strnum
