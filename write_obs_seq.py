@@ -6,6 +6,10 @@ import math
 
 maxmodelnum = int(sys.argv[1])
 fpath = str(sys.argv[2])
+obs_sec = int(sys.argv[3])
+obs_days = int(sys.argv[4])
+lon = float(sys.argv[5])
+lat = float(sys.argv[6])
 
 summed_mufluxes = []
 for modelnum in range(1,maxmodelnum+1):
@@ -30,14 +34,14 @@ GSI Quality Control
           -1           -1          -1
 obdef
 loc3d
-     4.581663856694569        0.6389650498077684         92500.00000000000      2
+     {2:0.15f}        {3:0.15f}         92500.00000000000      -2
 kind
           125
-external_FO      {0}       1""".format(maxmodelnum, exampleobsflux)
+external_FO      {0}       1""".format(maxmodelnum, exampleobsflux, lon, lat)
 
-footer=""" 21600     152057
-   0.640000000000000
-   0.00000000000000"""
+footer=""" {0}     {1}
+   0.000000000000000
+   0.00000000000000""".format(obs_sec, obs_days)
 
 nrows = math.ceil(len(summed_mufluxes)/3.)
 reshaped_arr = []

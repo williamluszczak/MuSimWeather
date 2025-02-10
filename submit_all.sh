@@ -7,6 +7,11 @@ outdir=/users/PAS0654/wluszczak/ensda/
 username=wluszczak
 osc_acc=pas2277
 NUM_ENS=50
+obs_sec=21600
+obs_days=152057
+lon=4.581663856694569
+lat=0.6389650498077684
+
 
 if ! test -d $outdir/output/; then
   echo "Making output directory" $outdir/output/
@@ -112,6 +117,6 @@ while [ $combinefiles_complete -eq 0 ]; do
   sleep 30s
 done
 
-python3 write_obs_seq.py $NUM_ENS $outdir
+python3 write_obs_seq.py $NUM_ENS $outdir $obs_sec $obs_days $lon $lat
 
 echo "Finished everything"
