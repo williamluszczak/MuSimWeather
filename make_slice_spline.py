@@ -65,6 +65,45 @@ def make_slice_spline(phi, latlonhspline, detlon, detlat):
     slice_spline = interpolate.LinearNDInterpolator(list(zip(slice_ls,slice_zs)),zdrhos)
     return slice_spline
 
+def make_avg_spline(phis, splinedict, modelnum, detlon, detlat):
+#    splinedict_filepath = fpath+'slice_splines_%s_%0.3f_%0.3f.npy'%(str(modelnum).zfill(5), detlon, detlat)
+#    splinedict_file = np.load(splinedict_filepath, allow_pickle=True)
+#    splinedict = splinedict_file.item()
+
+    slice_vals_list = []
+    for phi in phis:
+        print(phi)
+        slice_spline = splinedict[phi]
+        xvals = np.linspace(0,5000,100)
+        zvals = np.linspace(0,25,100)
+
+        arr_x = []
+        arr_z = []
+        slicevals = []
+        for x in xvals:
+            for z in zvals:
+                arr_x.append(x)
+                arr_z.append(z)
+                splineval = slice_spline(x,z)
+                if np.isnan(splineval):
+                    slicevals.append(0.)
+                else:
+                    slicevals.append(splineval)
+        outarr = np.array([arr_x, arr_z, slicevals])
+
+        plt_x = outarr[0]
+        plt_z = outarr[1]
+        slicevals = outarr[2]
+        slice_vals_list.append(slicevals)
+
+    slice_vals_list = np.array(slice_vals_list)
+    slice_avg = np.average(slice_vals_list, axis=0)
+
+    spline_arrs = np.array([plt_x, plt_z, slice_avg])
+    return spline_arrs
+    #avg_spline = interpolate.LinearNDInterpolator(list(zip(plt_x, plt_z)), slice_avg)
+    #return avg_spline
+
 
 modelnum = int(sys.argv[1])
 #phi = float(sys.argv[2])
@@ -106,4 +145,9 @@ for phi in np.arange(0,360,1):
 ##splinedir = '/users/PAS0654/wluszczak/ensda/splines/'
 splinedir = outdir+'/splines/'
 #np.save(splinedir+'slice_spline_%s_%0.3f_%0.3f_%0.3f'%(str(modelnum).zfill(5), phi, detlon, detlat), outarr)
-np.save(splinedir+'slice_splines_%s_%0.3f_%0.3f.npy'%(str(modelnum).zfill(5), detlon, detlat), spline_dict)
+
+#np.save(splinedir+'slice_splines_%s_%0.3f_%0.3f.npy'%(str(modelnum).zfill(5), detlon, detlat), spline_dict)
+phis = np.arange(0,360,1)
+avg_spline = make_avg_spline(phis, spline_dict, modelnum, detlon, detlat)
+fpath = outdir+'/splines/'
+np.save(fpath+'/avg_spline_%s.npy'%(str(modelnum).zfill(5)), avg_spline)

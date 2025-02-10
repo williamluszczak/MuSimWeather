@@ -13,6 +13,7 @@ for modelnum in range(1,maxmodelnum+1):
 #    print(np.sum(combined_muflux[1]))
     summed_mufluxes.append(np.sum(combined_muflux[1]))
 
+exampleobsflux = np.random.choice(summed_mufluxes)
 
 header = """ obs_sequence
 obs_type_definitions
@@ -24,19 +25,19 @@ observation
 GSI Quality Control                                             
   first:            1  last:         1
  OBS            1
-   100679.998779297     
-   1.00000000000000     
+   {1:016.12f}     
+   0.00000000000000     
           -1           -1          -1
 obdef
 loc3d
      4.581663856694569        0.6389650498077684         92500.00000000000      2
 kind
           125
-external_FO      {0}       1""".format(maxmodelnum)
+external_FO      {0}       1""".format(maxmodelnum, exampleobsflux)
 
 footer=""" 21600     152057
    0.640000000000000
-   1.00000000000000"""
+   0.00000000000000"""
 
 nrows = math.ceil(len(summed_mufluxes)/3.)
 reshaped_arr = []

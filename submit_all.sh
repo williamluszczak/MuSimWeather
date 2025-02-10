@@ -28,11 +28,10 @@ for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
     if ((job_count<600)); then
       echo "submitting job " $modelnum $ph
       echo $osc_acc
-      sbatch --account=$osc_acc submit_slice_spline.sh $modelnum $detlon $detlat $inputdir $outdir
+      sbatch --account=$osc_acc --output=/dev/null --error=/dev/null submit_slice_spline.sh $modelnum $detlon $detlat $inputdir $outdir
       model_complete=1
       echo "submitted model" $modelnum
     fi
-    sleep 30s
   done
 done
 
@@ -42,7 +41,7 @@ while [ $part1_complete -eq 0 ]; do
   job_count=$(echo $squeue_out | cut -d ' ' -f 1)
   if [ $job_count -eq 1 ]; then
     part1_complete=1
-    echo "all slices calculated, proceeding with combining"
+    echo "all slices calculated and combined"
   fi
   sleep 10s
 done
@@ -50,7 +49,7 @@ done
 
 outputdir=$outdir/output/
 for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
-  sbatch --account=$osc_acc submit_combine_slices.sh $modelnum $detlon $detlat $outdir
+#  sbatch --account=$osc_acc submit_combine_slices.sh $modelnum $detlon $detlat $outdir
   strnum=$(printf "%05g" $modelnum)
   if ! test -d $outputdir/$strnum/; then
     echo "Making output directory" $outputdir/$strnum
@@ -79,7 +78,7 @@ for ((modelnum=0; modelnum<=$NUM_ENS; modelnum++)); do
     if ((job_count<900)); then
       echo "Submitting jobs for model" $modelnum
       for th in {5..81..5}; do
-        sbatch --account=$osc_acc submit_muflux_calc.sh $modelnum $th $outdir
+        sbatch --account=$osc_acc --output=/dev/null --error=/dev/null submit_muflux_calc.sh $modelnum $th $outdir
       done
       model_complete=1
     fi
@@ -113,6 +112,6 @@ while [ $combinefiles_complete -eq 0 ]; do
   sleep 30s
 done
 
-python write_obs_seq.py $NUM_ENS $outdir
+python3 write_obs_seq.py $NUM_ENS $outdir
 
 echo "Finished everything"
