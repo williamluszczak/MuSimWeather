@@ -16,6 +16,8 @@ You should only have to interface with the `submit_all.sh` script. Before runnin
 - `outdir` is where you want the output files (as well as temporary spline files) to be written. There will be a lot of temporary files written to this directory, but the scripts should autmatically clean up intermediate files at the end
 - `username` is your OSC username (used for `squeue` commands)
 - `osc_acc` is the OSC project number (e.g. PAS2635 or whatever project you want to use resources from to run these calculations)
+- `obs_sec` and `obs_days` are the time of the hypothetical muon flux observation. Currently, this observation is randomly selected as one of the ensemble member measurements
+- `lon` and `lat` are the longitude and latitude of the muon flux observation measurement (in radians) 
 
 Once these variables are set, you should just be able to run `./submit_all.sh` to generate your muon flux output. Output `.npy` files describing the average muon flux as a function of declination will be written to `$(outdir)/output/`/ 
  
